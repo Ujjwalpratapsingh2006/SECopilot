@@ -32,8 +32,7 @@ const login=async (req,res)=>{
     try{
         const {email,password}=req.body;
         const user=await userModel.findOne({email});
-        // We removed OAuth, so we only check if the user exists and has a password
-        if(!user || !user.password){
+        if(!user || (!user.password && user.googleId)){
             return res.status(401).json({message:"Invalid email or password."});
         }
         const isPasswordCorrect=await bcrypt.compare(password,user.password);
